@@ -6,7 +6,6 @@ import {
   WaterfallDialog,
   WaterfallStepContext
 } from 'botbuilder-dialogs';
-import { GraphHelper } from '../helpers/graphHelper';
 import { HelperDialog } from './helperDialog';
 
 const TEXT_PROMPT = 'textPrompt';
@@ -22,11 +21,6 @@ export class OwnerResolverDialog extends HelperDialog {
       const owner: string = promptContext.recognized.value;
       if (!OwnerResolverDialog.validateEmail(owner)) {
         promptContext.context.sendActivity('Malformatted email adress.');
-        return false;
-      }
-      
-      if (!await GraphHelper.userExists(OwnerResolverDialog.tokenResponse, owner))  {
-        promptContext.context.sendActivity('User doesn\'t exist.');
         return false;
       }
 

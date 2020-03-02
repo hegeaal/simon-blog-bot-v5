@@ -9,12 +9,10 @@ import {
     WaterfallStepContext
 } from 'botbuilder-dialogs';
 
-import { AliasResolverDialog } from './aliasResolverDialog';
 import { HelperDialog } from './helperDialog';
 import { OwnerResolverDialog } from './ownerResolverDialog';
 import { SiteDetails } from './siteDetails';
 
-const ALIAS_RESOLVER_DIALOG = 'aliasResolverDialog';
 const TEXT_PROMPT = 'textPrompt';
 const CHOICE_PROMPT = 'choicePrompt';
 const TITLE_PROMPT = 'titlePrompt';
@@ -26,7 +24,6 @@ export class SiteDialog extends HelperDialog {
     constructor(id: string) {
         super(id || 'siteDialog', process.env.connectionName);
         this
-            .addDialog(new AliasResolverDialog(ALIAS_RESOLVER_DIALOG))
             .addDialog(new ChoicePrompt(CHOICE_PROMPT))
             .addDialog(new TextPrompt(TITLE_PROMPT, this.titlePromptValidator))
             .addDialog(new TextPrompt(TEXT_PROMPT))
@@ -137,7 +134,8 @@ export class SiteDialog extends HelperDialog {
         } else {
             
             if (!siteDetails.alias) {
-                return await stepContext.beginDialog(ALIAS_RESOLVER_DIALOG, { siteDetails });
+                const text = 'Provide an alias for your site';
+                return await stepContext.prompt(TEXT_PROMPT, { prompt: text }); 
             } else {
                 return await stepContext.next(siteDetails.alias);
             }
