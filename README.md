@@ -1,11 +1,11 @@
-# simon-blog-bot-v6
+# simon-blog-bot-v5
 
 Develop a Bot step by step, introducing more concepts as we go
 
-This is the Bot that is used in the Calling Microsoft Graph Blog post #6.
+This is the Bot that is used in the Bot Authentication Blog post #5.
 
 
-[URL](https://simonagren.github.io/azurebot-nodejs-part6)
+[URL](https://simonagren.github.io/azurebot-nodejs-part5)
 
 
 ## Prerequisites
