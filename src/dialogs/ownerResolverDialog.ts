@@ -1,6 +1,5 @@
 import {
   DialogTurnResult,
-  OAuthPrompt,
   PromptValidatorContext,
   TextPrompt,
   WaterfallDialog,
@@ -10,11 +9,8 @@ import { HelperDialog } from './helperDialog';
 
 const TEXT_PROMPT = 'textPrompt';
 const WATERFALL_DIALOG = 'waterfallDialog';
-const OAUTH_PROMPT = 'OAuthPrompt';
 
 export class OwnerResolverDialog extends HelperDialog {
-  private static tokenResponse: any;
-  
   private static async ownerPromptValidator(promptContext: PromptValidatorContext<string>): Promise<boolean> {
     if (promptContext.recognized.succeeded) {
       
@@ -41,14 +37,7 @@ export class OwnerResolverDialog extends HelperDialog {
     
     this
         .addDialog(new TextPrompt(TEXT_PROMPT, OwnerResolverDialog.ownerPromptValidator.bind(this)))
-        .addDialog(new OAuthPrompt(OAUTH_PROMPT, {
-          connectionName: process.env.connectionName,
-          text: 'Please Sign In',
-          timeout: 300000,
-          title: 'Sign In'
-        }))
         .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
-          this.promptStep.bind(this),
           this.initialStep.bind(this),
           this.finalStep.bind(this)
         ]));
@@ -57,19 +46,7 @@ export class OwnerResolverDialog extends HelperDialog {
 
   }
 
-  /**
-   * Prompt step in the waterfall. 
-   */
-  private async promptStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-      return await stepContext.beginDialog(OAUTH_PROMPT);
-  }
-
   private async initialStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-    const tokenResponse = stepContext.result;
-    if (tokenResponse && tokenResponse.token) {
-      
-      OwnerResolverDialog.tokenResponse = tokenResponse;
-
       const siteDetails = (stepContext.options as any).siteDetails;
       const promptMsg = 'Provide an owner email';
 
@@ -80,9 +57,6 @@ export class OwnerResolverDialog extends HelperDialog {
       } else {
         return await stepContext.next(siteDetails.owner);
       }
-    }
-    await stepContext.context.sendActivity('Login was not successful please try again.');
-    return await stepContext.endDialog();
   }
 
   private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {    

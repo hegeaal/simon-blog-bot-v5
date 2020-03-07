@@ -2,11 +2,11 @@ import { InputHints } from 'botbuilder';
 import { ComponentDialog, DialogContext, DialogTurnResult, DialogTurnStatus } from 'botbuilder-dialogs';
 
 export class HelperDialog extends ComponentDialog {
-    private _connectionName: string;
+    private connectionName: string;
     
     constructor(id: string, connectionName: string) {
         super(id);
-        this._connectionName = connectionName;
+        this.connectionName = connectionName;
     }
 
     public async onContinueDialog(dc: DialogContext): Promise<DialogTurnResult> {
@@ -35,7 +35,7 @@ export class HelperDialog extends ComponentDialog {
                     return await dc.cancelAllDialogs();
                 case 'logout':
                     const adapter: any = dc.context.adapter;
-                    await adapter.signOutUser(dc.context, this._connectionName);
+                    await adapter.signOutUser(dc.context, this.connectionName);
                     dc.context.sendActivity('You have been signed out');
                     return await dc.cancelAllDialogs();
             }
