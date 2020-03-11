@@ -70,7 +70,7 @@ export class MainDialog extends ComponentDialog {
             await stepContext.context.sendActivity('You are now logged in.');
             
             const siteDetails = new SiteDetails();
-            return await stepContext.beginDialog('siteDialog', siteDetails);
+            return await stepContext.beginDialog(SITE_DIALOG, siteDetails);
         }
         await stepContext.context.sendActivity('Login was not successful please try again.');
         return await stepContext.endDialog();  
